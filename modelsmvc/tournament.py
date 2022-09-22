@@ -1,3 +1,6 @@
+from modelsmvc import settings
+
+
 class Tournoi:
     def __init__(self, nom, lieu, date,
                  nombre_de_tours, tournees, joueurs,

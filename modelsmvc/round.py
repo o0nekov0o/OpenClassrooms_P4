@@ -1,3 +1,9 @@
+import random
+from modelsmvc import player
+from modelsmvc import versus
+from modelsmvc import settings
+
+
 class Tour:
     def __init__(self, liste_de_matchs=[]):
         self.liste_de_matchs = liste_de_matchs

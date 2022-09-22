@@ -1,3 +1,7 @@
+from modelsmvc import round
+from modelsmvc import settings
+
+
 class Match:
     def __init__(self, paire_0, paire_1, paire_2, paire_3, paire_4, paire_5, paire_6, paire_7):
         self.paire_0 = paire_0

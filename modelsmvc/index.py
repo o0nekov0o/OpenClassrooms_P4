@@ -1,3 +1,7 @@
+from modelsmvc import round
+from modelsmvc import settings
+settings.init()
+
 def demarrer_projet():
     answer = "o-n"
     while answer.lower() not in {"o", "n"}:

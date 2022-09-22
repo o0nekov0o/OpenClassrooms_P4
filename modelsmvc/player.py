@@ -1,3 +1,7 @@
+from modelsmvc import settings
+from modelsmvc import tournament
+
+
 class Joueur:
     def __init__(self, nom_de_famille, prenom, date_de_naissance,
                  sexe, classement, score=0, hasard=0):
