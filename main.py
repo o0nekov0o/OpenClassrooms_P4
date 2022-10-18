@@ -1,118 +1,198 @@
 from modelsmvc import tournament, \
-    player, round, versus, settings
-settings.init()
+    player, round, settings
+from tinydb import TinyDB
 
-main_tournoi = tournament.Tournoi.ajouter_tournoi()
+db = TinyDB('db.json')
+settings.init()
+all_tournaments = []
+settings.tournament_decode(db, all_tournaments)
+settings.player_decode(db, all_tournaments)
 
 
 def main_view():
-    print("0/ Gérer les tournois")
-    print("1/ Gérer les joueurs")
-    print("2/ Gérer les matchs")
-
-def main_controller():
-    main_view()
-    choix = input("Que voulez-vous faire ?")
-    if choix == '0':
-        tournament_controller()
-    elif choix == '1':
-        player_controller()
-    elif choix == '2':
-        round_controller()
-    else:
-        print("Je n'ai pas compris votre choix")
-        main_controller()
-
-def tournament_view():
+    """
+    main menu view
+    :return: for main controller use
+    """
     print("0/ Ajouter un tournoi")
     print("1/ Modifier un tournoi")
-    print("2/ Choisir un tournoi")
-    print("3/ Revenir au menu principal")
-        
-def tournament_controller():
-    tournament_view()
-    choix = input("Que voulez-vous faire ?")
-    if choix == '0':
-        tournament.Tournoi.ajouter_tournoi()
-        tournament_controller()
-    elif choix == '1':
-        edit_tournament_controller() # a creer
-        tournament_controller()
-    elif choix == '2':
-        choose_tournament_controller() # a creer
-        tournament_controller()
-    elif choix == '2':
-        main_controller()
-    else:
+    if settings.cancel == 1:
+        all_tournaments.pop(-1)
+    for i, tournament in enumerate(all_tournaments):
+        print(f"{i + 2}/ Gérer le tournoi {tournament.nom}")
+        settings.cancel = 0
+    choix = int(input("Que voulez vous faire ? "))
+    return choix
+
+
+def main_controller():
+    """
+    main menu controller
+    :return: None
+    """
+    try:
+        choix = main_view()
+        if choix == 0:
+            new_tournament = tournament.Tournoi(f"tournoi_{len(all_tournaments)}", "nom", "lieu", "date",
+                                                "nombre_de_tours", "tournees", "joueurs", "controle_du_temps",
+                                                "description").ajouter_tournoi(all_tournaments, db)
+            all_tournaments.append(new_tournament)
+            main_controller()
+        elif choix == 1:
+            tournament.Tournoi(f"tournoi_{len(all_tournaments)}", "nom", "lieu", "date",
+                               "nombre_de_tours", "tournees", "joueurs",
+                               "controle_du_temps", "description").editer_tournoi(all_tournaments, db)
+            main_controller()
+        else:
+            tournament_to_manage = all_tournaments[choix - 2]
+            tournament_controller(tournament_to_manage)
+    except (ValueError, IndexError):
         print("Je n'ai pas compris votre choix")
-        tournament_controller()
+        main_controller()
+    except KeyboardInterrupt:
+        print(" ==> Ajout du tour annulé")
+        return None
+
+
+def tournament_view():
+    """
+    tournament menu view
+    :return: for tournament controller use
+    """
+    print("0/ Gérer les joueurs")
+    print("1/ Gérer les rounds")
+    print("2/ Revenir au menu principal")
+    choix = input("Que voulez vous faire ? ")
+    return choix
+
+
+def tournament_controller(main_tournoi):
+    """
+    tournament menu controller
+    :param main_tournoi: from main_controller, tournament being managed
+    :return: None
+    """
+    try:
+        choix = tournament_view()
+        if choix == '0':
+            player_controller(main_tournoi)
+            tournament_controller(main_tournoi)
+        elif choix == '1':
+            round_controller(main_tournoi)
+            tournament_controller(main_tournoi)
+        elif choix == '2':
+            main_controller()
+        else:
+            print("Je n'ai pas compris votre choix")
+            tournament_controller(main_tournoi)
+    except KeyboardInterrupt:
+        print(" ==> Gestion du tournoi annulée")
+        main_controller()
+
 
 def player_view():
-    print("0/ Ajouter les joueurs")
+    """
+    player menu view
+    :return: for player controller use
+    """
+    print("0/ Ajouter un joueur")
     print("1/ Modifier un joueur")
-    print("2/ Revenir au menu principal")
+    print("2/ Revenir au menu précédent")
+    print("3/ Revenir au menu principal")
+    choix = input("Que voulez-vous faire ? ")
+    return choix
 
-def player_controller():
-    player_view()
-    choix = input("Que voulez-vous faire ?")
-    if choix == '0':
-        player.Joueur.ajouter_joueur()
-        player_controller()
-    elif choix == '1':
-        edit_player_controller()
-        player_controller()
-    elif choix == '2':
-        main_controller()
-    else:
-        print("Je n'ai pas compris votre choix")
-        player_controller()
-        
+
+def player_controller(main_tournoi):
+    """
+    player menu controller
+    :param main_tournoi: from tournament_controller, tournament being managed
+    :return: None
+    """
+    try:
+        choix = player_view()
+        if choix == '0':
+            player.Joueur(f"joueur_{len(main_tournoi.joueurs)}", "nom_de_famille", "prenom", "date_de_naissance",
+                          "sexe", "classement").ajouter_joueur(main_tournoi, db)
+            player_controller(main_tournoi)
+        elif choix == '1':
+            player.Joueur(f"joueur_{len(main_tournoi.joueurs)}", "nom_de_famille", "prenom", "date_de_naissance",
+                          "sexe", "classement").editer_joueur(main_tournoi, db)
+            player_controller(main_tournoi)
+        elif choix == '2':
+            return None
+        elif choix == '3':
+            main_controller()
+        else:
+            print("Je n'ai pas compris votre choix")
+            player_controller(main_tournoi)
+    except KeyboardInterrupt:
+        print(" ==> Gestion des joueurs annulée")
+        return None
+
+
 def round_view():
-    print("0/ Ajouter les matchs")
-    print("1/ Modifier un match")
-    print("2/ Revenir au menu principal")
+    """
+    round menu view
+    :return: for round controller use
+    """
+    print("0/ Ajouter des rounds")
+    print("1/ Afficher les rounds joués")
+    print("2/ Revenir au menu précédent")
+    print("3/ Revenir au menu principal")
+    choix = input("Que voulez-vous faire ? ")
+    return choix
 
-def round_controller():
-    round_view()
-    choix = input("Que voulez-vous faire ?")
-    if choix == '0':
-        round.Tour.demarrer_tour()
-        round_controller()
-    elif choix == '1':
-        edit_round_controller() # a creer
-        round_controller()
-    elif choix == '2':
-        main_controller()
-    else:
-        print("Je n'ai pas compris votre choix")
-        round_controller()
+
+def round_controller(main_tournoi):
+    """
+    round menu controller
+    :param main_tournoi: from tournament_controller, tournament being managed
+    :return:
+    """
+    try:
+        choix = round_view()
+        if choix == '0':
+            round.Tour(f"tour_{settings.ref}", "liste_de_matchs").ajouter_tour(main_tournoi)
+            round_controller(main_tournoi)
+        elif choix == '1':
+            round.Tour(f"tour_{settings.ref}", "liste_de_matchs").afficher_tours(main_tournoi)
+            round_controller(main_tournoi)
+        elif choix == '2':
+            return None
+        elif choix == '3':
+            main_controller()
+        else:
+            print("Je n'ai pas compris votre choix")
+            round_controller(main_tournoi)
+    except KeyboardInterrupt:
+        print(" ==> Gestion des tours annulée")
+        return None
+
 
 """
-global ref
-ref = -1  # a mettre dans settings
+def add_round_controller(tournoi):
+    number_of_rounds = len(tournoi.tournees)
+    new_id = f"round_{number_of_rounds+1}"
+    matches = []
+    for i in range(0, len(tournoi.joueurs), 2):
+        id_match = f"{new_id}_match_{i}"
+        matches.append(versus.Match(id=id_match, resultat=None, liste_de_joueurs=[tournoi.joueurs[i], tournoi.joueurs[i+1]]))
+    new_tour = round.Tour(id=new_id, liste_de_matchs=matches)
+    print("nouveau rond ajouté")
+    tournoi.tournees.append(new_tour)
 
-def new_player_controller():
-    global ref
-    ref += 1
-    nom_de_famille = input("quel est le nom du joueur ?")
-    prenom = input("quel est le prenom du joueur ?")
-    date_de_naissance = input("quel est la date de naissance du joueur ?")
-    sexe = input("quel est le sexe du joueur ?")
-    classement = ref
-    locals()[f"joueur_{ref}"] = player.Joueur(nom_de_famille=nom_de_famille, prenom=prenom,
-                                              date_de_naissance=date_de_naissance, sexe=sexe, classement=classement)
-    main_tournoi.joueurs.append(locals()[f"joueur_{ref}"])
-    print("joueur ajoute")
-    player_controller()
 
-def edit_player_controller():
-    for i, joueur in enumerate(main_tournoi.joueurs):
-        print(f"{i}/ {joueur.nom_de_famille}")
-    index = input("tapez le nom du joueur a modif")
-    player_to_modify = main_tournoi.joueurs(index)
-    new_name = input("quel est le nouveau nom")
-    player_to_modify.nom_de_famille = new_name
-    main_controller()
+def edit_round_controller(tournoi):
+    round = tournoi.tournees[-1]
+    for match, i in enumerate(round.matchs):
+        print(f"{i}/ {match.id}") # faire comme players avec enumerate pour choix match a editer
+    choix = input("quel match voulez vous editer")
+    match_a_editer = round.matchs[choix]
+    choix_bis = input("quel est le score du match (-1, 0 ou 1")
+    match_a_editer.score = choix_bis
+    # en fonction du score, changer le score total des 2 joueurs du match
+    round_controller(tournoi)
 """
 
 main_controller()
