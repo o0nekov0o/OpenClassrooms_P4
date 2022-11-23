@@ -1,4 +1,4 @@
-from modelsmvc import round
+from modelsmvc import rounds
 from modelsmvc import settings
 settings.init()
 
@@ -9,7 +9,7 @@ def demarrer_projet():
         while answer == "o":
             # tournament.Tournoi.ajouter_tournoi() # appel direct via module player
             # player.Joueur.ajouter_joueur() # appel direct via module round
-            round.Tour.demarrer_tour()
+            poule.Tour.demarrer_tour()
             answer = "o-n"
             while answer.lower() not in {"o", "n"}:
                 answer = input("Entrez si vous voulez ajouter un tournoi, oui (o) ou non (n): ")

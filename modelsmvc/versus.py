@@ -1,11 +1,11 @@
-from modelsmvc import round
+from modelsmvc import rounds
 from modelsmvc import settings
 
 
 class Match:
-    def __init__(self, id, resultat, liste_de_joueurs):
+    def __init__(self, id, liste_de_joueurs):
         self.id = id
-        self.resultat = resultat
+        self.resultat = None
         self.liste_de_joueurs = liste_de_joueurs
 
     def generer_paires(self, matchs_potentiels, main_tournoi):
@@ -31,7 +31,7 @@ class Match:
     def ajouter_match(self, tour_managed, main_tournoi):
         """
         starts the appending of the played matches in round matches list, especially by creating match instances
-        :param tour_managed: from tour.py, ajouter_tour, used to pass the instance to round.py, saisir_score
+        :param tour_managed: from tour.py, ajouter_tour, used to pass the instance to rounds.py, saisir_score
         :param main_tournoi: from tour.py, ajouter_tour, used to pass the instance to saisir_score & generer_paires
         :return: None
         """
