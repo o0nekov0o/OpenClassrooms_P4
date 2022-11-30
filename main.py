@@ -1,12 +1,13 @@
-from modelsmvc import tournament, \
+from z__project_all__z import tournament, \
     player, rounds, settings
 from tinydb import TinyDB
 
 db = TinyDB('db.json')
-settings.init()
 all_tournaments = []
 settings.tournament_decode(db, all_tournaments)
 settings.player_decode(db, all_tournaments)
+settings.rounds_decode(db, all_tournaments)
+settings.versus_decode(db, all_tournaments)
 
 
 def main_view():
@@ -16,8 +17,6 @@ def main_view():
     """
     print("0/ Ajouter un tournoi")
     print("1/ Modifier un tournoi")
-    if settings.cancel == 1:
-        all_tournaments.pop(-1)
     for i, tournament in enumerate(all_tournaments):
         print(f"{i + 2}/ Gérer le tournoi {tournament.nom}")
         settings.cancel = 0
@@ -34,10 +33,9 @@ def main_controller():
     try:
         choix = main_view()
         if choix == 0:
-            new_tournament = tournament.Tournoi(f"tournoi_{len(all_tournaments)}", "nom", "lieu", "date",
-                                                "nombre_de_tours", "tournees", "joueurs", "controle_du_temps",
-                                                "description").ajouter_tournoi_controller(all_tournaments, db)
-            all_tournaments.append(new_tournament)
+            tournament.Tournoi(f"tournoi_{len(all_tournaments)}", "nom", "lieu", "date",
+                               "nombre_de_tours", "tournees", "joueurs", "controle_du_temps",
+                               "description").ajouter_tournoi_controller(all_tournaments, db)
             main_controller()
         elif choix == 1:
             tournament.Tournoi(f"tournoi_{len(all_tournaments)}", "nom", "lieu", "date",
@@ -49,9 +47,11 @@ def main_controller():
             tournament_controller(tournament_to_manage)
     except (ValueError, IndexError):
         print("Je n'ai pas compris votre choix")
+        print("-" * 163)
         main_controller()
     except KeyboardInterrupt:
         print(" ==> Ajout du tournoi annulé")
+        print("-" * 163)
         return None
     except TypeError:
         main_controller()
@@ -89,9 +89,11 @@ def tournament_controller(main_tournoi):
             main_controller()
         else:
             print("Je n'ai pas compris votre choix")
+            print("-" * 163)
             tournament_controller(main_tournoi)
     except KeyboardInterrupt:
         print(" ==> Gestion du tournoi annulée")
+        print("-" * 163)
         main_controller()
 
 
@@ -131,9 +133,11 @@ def player_controller(main_tournoi):
             main_controller()
         else:
             print("Je n'ai pas compris votre choix")
+            print("-" * 163)
             player_controller(main_tournoi)
     except KeyboardInterrupt:
         print(" ==> Gestion des joueurs annulée")
+        print("-" * 163)
     except TypeError:
         player_controller(main_tournoi)
         return None
@@ -171,9 +175,11 @@ def round_controller(main_tournoi):
             main_controller()
         else:
             print("Je n'ai pas compris votre choix")
+            print("-" * 163)
             round_controller(main_tournoi)
     except KeyboardInterrupt:
         print(" ==> Gestion des tours annulée")
+        print("-" * 163)
         return None
 
 

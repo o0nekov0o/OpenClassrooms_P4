@@ -1,5 +1,5 @@
-from modelsmvc import rounds
-from modelsmvc import settings
+from z__project_all__z import rounds
+from z__project_all__z import settings
 settings.init()
 
 def demarrer_projet():

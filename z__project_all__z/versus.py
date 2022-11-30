@@ -1,12 +1,12 @@
-from modelsmvc import rounds
-from modelsmvc import settings
+from z__project_all__z import rounds
+from z__project_all__z import settings
 
 
 class Match:
-    def __init__(self, id, liste_de_joueurs):
+    def __init__(self, id, liste_de_joueurs, resultat=None):
         self.id = id
-        self.resultat = None
         self.liste_de_joueurs = liste_de_joueurs
+        self.resultat = resultat
 
     def generer_paires(self, matchs_potentiels, main_tournoi):
         """
@@ -48,7 +48,7 @@ class Match:
                     settings.pwd = j
                     new_match = Match(f"match_{settings.pwd}", {'0': '1', '1': '2'"""results"""}, ["""players"""])
                     matchs_prochains = new_match.generer_paires(new_match, main_tournoi)
-                    round.Tour(f"tour_{settings.ref}", "liste_de_matchs") \
+                    rounds.Tour(f"tour_{settings.ref}", "liste_de_matchs") \
                         .saisir_score(matchs_prochains, j, tour_managed, main_tournoi)
                     if settings.skip_1 == 0:
                         reply = "o-n"

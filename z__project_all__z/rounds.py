@@ -1,5 +1,5 @@
-from modelsmvc import versus
-from modelsmvc import settings
+from z__project_all__z import versus
+from z__project_all__z import settings
 
 
 class Tour:
@@ -38,9 +38,10 @@ class Tour:
                                                                                    main_tournoi.joueurs[i + 4]]))
                 new_tour = Tour(id=id_round, liste_de_matches=new_matches)
                 print("Nouveau round créé")
+                print("-" * 163)
                 print("Voici la liste des matches à jouer")
-                for i, match in enumerate(new_matches):
-                    print(f"{i}/ {match.liste_de_joueurs[0].prenom} vs {match.liste_de_joueurs[1].prenom}")
+                for j, match in enumerate(new_matches):
+                    print(f"{j}/ {match.liste_de_joueurs[0].prenom} vs {match.liste_de_joueurs[1].prenom}")
                 print("-" * 163)
                 main_tournoi.tournees.append(new_tour)
                 Tour(id=id_round, liste_de_matches=new_matches).saisir_score(main_tournoi, bdd)
@@ -58,7 +59,7 @@ class Tour:
                         already_played[playerA].append(playerB)
                         already_played[playerB].append(playerA)
                 players_added_to_round = []
-                for j in range(0, 4):
+                for k in range(0, 4):
                     for player in main_tournoi.joueurs:
                         if player not in players_added_to_round:
                             for adversaire in main_tournoi.joueurs:
@@ -67,17 +68,19 @@ class Tour:
                                         player != adversaire and
                                         adversaire not in already_played[player]
                                 ):
-                                    id_match = f"{id_round}_match_{j}"
+                                    id_match = f"{id_round}_match_{k}"
                                     new_matches.append(
                                         versus.Match(id=id_match, liste_de_joueurs=[player, adversaire]))
                                     players_added_to_round.append(adversaire)
                                     players_added_to_round.append(player)
+                                    k += 1
                                     break
                 new_tour = Tour(id=id_round, liste_de_matches=new_matches)
                 print("Nouveau round créé")
+                print("-" * 163)
                 print("Voici la liste des matches à jouer")
-                for i, match in enumerate(new_matches):
-                    print(f"{i}/ {match.liste_de_joueurs[0].prenom} vs {match.liste_de_joueurs[1].prenom}")
+                for L, match in enumerate(new_matches):
+                    print(f"{L}/ {match.liste_de_joueurs[0].prenom} vs {match.liste_de_joueurs[1].prenom}")
                 print("-" * 163)
                 main_tournoi.tournees.append(new_tour)
                 Tour(id=id_round, liste_de_matches=new_matches).saisir_score(main_tournoi, bdd)
@@ -88,16 +91,16 @@ class Tour:
     def saisir_score(self, main_tournoi, bdd):
         """
         manages the input of the score for the ended matches into the round being managed
-        :param matchs_confirmes: from versus.py, ajouter_match, for it to be appended in round matches list
-        :param boucle: from versus.py, ajouter_match, for using of loop in this function
-        :param tour_termine: from versus.py, ajouter_match, for management of created tour since code in tour.py
-        :param main_tournoi: from versus.py, ajouter_match, for appending of round in the tournament rounds list
+        :param matchs_confirmes: from versus.py.py, ajouter_match, for it to be appended in round matches list
+        :param boucle: from versus.py.py, ajouter_match, for using of loop in this function
+        :param tour_termine: from versus.py.py, ajouter_match, for management of created tour since code in tour.py
+        :param main_tournoi: from versus.py.py, ajouter_match, for appending of round in the tournament rounds list
         :return: None
         """
         try:
             if not main_tournoi.tournees:
                 print("Round non créé, créez-en un nouveau")
-                Tour(f"tour_{len(main_tournoi.tournees) + 1}", "liste_de_matchs").ajouter_tour(main_tournoi)
+                Tour(f"tour_{len(main_tournoi.tournees) + 1}", "liste_de_matchs").ajouter_tour(main_tournoi, bdd)
             round_to_modify = main_tournoi.tournees[-1]
             if Tour(f"tour_{len(main_tournoi.tournees) + 1}", "liste_de_matchs").completed(main_tournoi):
                 print("Round terminé, créez-en un nouveau")
