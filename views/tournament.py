@@ -45,37 +45,42 @@ class TournamentView:
         :param bdd: from main.py, to update serialized tournament instances in json file
         :return: None
         """
-        new_data_tournament = {
-            "nom": "",
-            "lieu": "",
-            "date": "99-99-9999",
-            "controle_du_temps": "quickblitz",
-            "description": ""
-        }
-        try:
-            for i, tournament in enumerate(tous_les_tournois):
-                print(f"{i}/ {tournament.nom}")
-            index = int(input("Quel tournoi voulez-vous modifier ? "))
-            tournament_to_modify = tous_les_tournois[index]
-            print(f"0/ Nom: {tournament_to_modify.nom}")
-            print(f"1/ Lieu: {tournament_to_modify.lieu}")
-            print(f"2/ Date: {tournament_to_modify.date}")
-            print(f"3/ Temps: {tournament_to_modify.controle_du_temps}")
-            print(f"4/ Description: {tournament_to_modify.description}")
-            print("5/ Annulation et retour")
-            choix = input("Que voulez-vous modifier ? ")
-            if choix in {"0", "1", "2", "3", "4", "5"}:
-                return new_data_tournament, tournament_to_modify, choix
-            else:
+        if len(tous_les_tournois) > 0:
+            new_data_tournament = {
+                "nom": "",
+                "lieu": "",
+                "date": "99-99-9999",
+                "controle_du_temps": "quickblitz",
+                "description": ""
+            }
+            try:
+                for i, tournament in enumerate(tous_les_tournois):
+                    print(f"{i}/ {tournament.nom}")
+                index = int(input("Quel tournoi voulez-vous modifier ? "))
+                tournament_to_modify = tous_les_tournois[index]
+                print(f"0/ Nom: {tournament_to_modify.nom}")
+                print(f"1/ Lieu: {tournament_to_modify.lieu}")
+                print(f"2/ Date: {tournament_to_modify.date}")
+                print(f"3/ Temps: {tournament_to_modify.controle_du_temps}")
+                print(f"4/ Description: {tournament_to_modify.description}")
+                print("5/ Annulation et retour")
+                choix = input("Que voulez-vous modifier ? ")
+                if choix in {"0", "1", "2", "3", "4", "5"}:
+                    return new_data_tournament, tournament_to_modify, choix
+                else:
+                    print("Je n'ai pas compris votre choix")
+                    print("-" * 163)
+                    self.editer_tournoi_view(tous_les_tournois)
+                print("-" * 163)
+            except (ValueError, IndexError):
                 print("Je n'ai pas compris votre choix")
                 print("-" * 163)
                 self.editer_tournoi_view(tous_les_tournois)
-            print("-" * 163)
-        except (ValueError, IndexError):
-            print("Je n'ai pas compris votre choix")
-            print("-" * 163)
-            self.editer_tournoi_view(tous_les_tournois)
-        except KeyboardInterrupt:
-            print(" ==> Modification du tournoi annulée")
+            except KeyboardInterrupt:
+                print(" ==> Modification du tournoi annulée")
+                print("-" * 163)
+                return None
+        else:
+            print("Aucun tournoi n'a déjà été ajouté")
             print("-" * 163)
             return None

@@ -5,9 +5,6 @@ from tinydb import TinyDB
 db = TinyDB('db.json')
 all_tournaments = []
 settings.tournament_decode(db, all_tournaments)
-settings.player_decode(db, all_tournaments)
-settings.rounds_decode(db, all_tournaments)
-settings.versus_decode(db, all_tournaments)
 
 
 def main_view():

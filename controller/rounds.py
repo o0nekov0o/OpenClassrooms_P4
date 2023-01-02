@@ -1,5 +1,7 @@
 from z__project_all__z import versus
-from z__project_all__z import settings
+from views.rounds import RoundView
+from models.rounds import Tour
+
 
 
 class RoundController:
@@ -27,12 +29,8 @@ class RoundController:
                     new_matches.append(versus.Match(id=id_match, liste_de_joueurs=[main_tournoi.joueurs[i],
                                                                                    main_tournoi.joueurs[i + 4]]))
                 new_tour = Tour(id=id_round, liste_de_matches=new_matches)
-                print("Nouveau round créé")
-                print("-" * 163)
-                print("Voici la liste des matches à jouer")
-                for j, match in enumerate(new_matches):
-                    print(f"{j}/ {match.liste_de_joueurs[0].prenom} vs {match.liste_de_joueurs[1].prenom}")
-                print("-" * 163)
+                RoundView.ajouter_tour_success_view(new_matches=new_matches)
+
                 main_tournoi.tournees.append(new_tour)
                 Tour(id=id_round, liste_de_matches=new_matches).saisir_score(main_tournoi, bdd)
             else:
@@ -66,12 +64,7 @@ class RoundController:
                                     k += 1
                                     break
                 new_tour = Tour(id=id_round, liste_de_matches=new_matches)
-                print("Nouveau round créé")
-                print("-" * 163)
-                print("Voici la liste des matches à jouer")
-                for L, match in enumerate(new_matches):
-                    print(f"{L}/ {match.liste_de_joueurs[0].prenom} vs {match.liste_de_joueurs[1].prenom}")
-                print("-" * 163)
+                RoundView.ajouter_tour_success_view(new_matches=new_matches)
                 main_tournoi.tournees.append(new_tour)
                 Tour(id=id_round, liste_de_matches=new_matches).saisir_score(main_tournoi, bdd)
         except KeyboardInterrupt:

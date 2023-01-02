@@ -50,48 +50,51 @@ def edit_tournament_encode(tournoi, bdd):
                 json.dump(data, jsonFile)
 
 
-def edit_player_encode(tournoi, bdd, joueur):
-    serialized_tournament = bdd.table("tournaments").all()
-    encoded_player = json.dumps(joueur, cls=Encoder, indent=4)
-    for i in range(len(serialized_tournament)):
-        if tournoi.id == f"tournoi_{i}":
-            serialized_player = bdd.table(f"players_{tournoi.id}").all()
-            for j in range(len(serialized_player)):
-                if joueur.id == f"joueur_{j}":
-                    serialized_player[j] = eval(encoded_player)
-                    with open("db.json", "r") as jsonFile:
-                        data = json.load(jsonFile)
-                    data[f"players_{tournoi.id}"][f"{j + 1}"] = eval(encoded_player)
-                    with open("db.json", "w") as jsonFile:
-                        json.dump(data, jsonFile)
+def player_decode(serialized_players):
+    players = []
+    for i in range(len(serialized_players)):
+        deserialized_player = serialized_players[i]
+        id = deserialized_player['id']
+        nom_de_famille = deserialized_player['nom_de_famille']
+        prenom = deserialized_player['prenom']
+        date_de_naissance = deserialized_player['date_de_naissance']
+        sexe = deserialized_player['sexe']
+        classement = deserialized_player['classement']
+        score = deserialized_player['score']
+        joueur = player.Joueur(id=id, nom_de_famille=nom_de_famille, prenom=prenom,
+                               date_de_naissance=date_de_naissance, sexe=sexe,
+                               classement=classement, score=score)
+        players.append(joueur)
+    return players
 
 
-def player_encode(tournoi, bdd, joueur):
-    serialized_tournament = bdd.table("tournaments").all()
-    for i in range(len(serialized_tournament)):
-        if tournoi.id == f"tournoi_{i}":
-            encoded_player = json.dumps(joueur, cls=Encoder, indent=4)
-            players_table = bdd.table(f"players_{tournoi.id}")
-            players_table.insert(eval(encoded_player))
+def versus_decode(serialized_matches, players):
+    matches = []
+    for i in range(len(serialized_matches)):
+        deserialized_match = serialized_matches[i]
+        id = deserialized_match['id']
+        liste_de_joueurs = player_decode(deserialized_match['liste_de_joueurs'])
+        for j in range(len(liste_de_joueurs)):
+            for k in range(len(players)):
+                if liste_de_joueurs[j].id == players[k].id:
+                    liste_de_joueurs[j] = players[k]
+                else:
+                    print("erreur de désérialisation")
+        resultat = deserialized_match['resultat']
+        match = versus.Match(id=id, liste_de_joueurs=liste_de_joueurs, resultat=resultat)
+        matches.append(match)
+    return matches
 
 
-def player_decode(bdd, tous_les_tournois):
-    for tournoi in tous_les_tournois:
-        serialized_player = bdd.table(f"players_{tournoi.id}").all()
-        tournoi.joueurs = []
-        for i in range(len(serialized_player)):
-            deserialized_player = serialized_player[i]
-            id = deserialized_player['id']
-            nom_de_famille = deserialized_player['nom_de_famille']
-            prenom = deserialized_player['prenom']
-            date_de_naissance = deserialized_player['date_de_naissance']
-            sexe = deserialized_player['sexe']
-            classement = deserialized_player['classement']
-            score = deserialized_player['score']
-            joueur = player.Joueur(id=id, nom_de_famille=nom_de_famille, prenom=prenom,
-                                   date_de_naissance=date_de_naissance, sexe=sexe,
-                                   classement=classement, score=score)
-            tournoi.joueurs.append(joueur)
+def rounds_decode(serialized_rounds, players):
+    tournees = []
+    for i in range(len(serialized_rounds)):
+        deserialized_round = serialized_rounds[i]
+        id = deserialized_round['id']
+        liste_de_matches = versus_decode(deserialized_round['liste_de_matches'], players)
+        tour = rounds.Tour(id=id, liste_de_matches=liste_de_matches)
+        tournees.append(tour)
+    return tournees
 
 
 def tournament_decode(bdd, tous_les_tournois):
@@ -103,36 +106,14 @@ def tournament_decode(bdd, tous_les_tournois):
         lieu = deserialized_tournament['lieu']
         date = deserialized_tournament['date']
         nombre_de_tours = deserialized_tournament['nombre_de_tours']
-        tournees = deserialized_tournament['tournees']
-        joueurs = deserialized_tournament['joueurs']
+        joueurs = player_decode(deserialized_tournament['joueurs'])
+        tournees = rounds_decode(deserialized_tournament['tournees'], joueurs)
         controle_du_temps = deserialized_tournament['controle_du_temps']
         description = deserialized_tournament['description']
         tournoi = tournament.Tournoi(id=id, nom=nom, lieu=lieu, date=date, nombre_de_tours=nombre_de_tours,
                                      tournees=tournees, joueurs=joueurs,
                                      controle_du_temps=controle_du_temps, description=description)
         tous_les_tournois.append(tournoi)
-
-
-def rounds_encode(tournoi, bdd, tour):
-    serialized_tournament = bdd.table("tournaments").all()
-    for i in range(len(serialized_tournament)):
-        if tournoi.id == f"tournoi_{i}":
-            encoded_round = json.dumps(tour, cls=Encoder, indent=4)
-            rounds_table = bdd.table(f"rounds_{tournoi.id}")
-            rounds_table.insert(eval(encoded_round))
-
-
-def versus_encode(tournoi, bdd, match):
-    serialized_tournament = bdd.table("tournaments").all()
-    for i in range(len(serialized_tournament)):
-        if tournoi.id == f"tournoi_{i}":
-            encoded_match = json.dumps(match, cls=Encoder, indent=4)
-            matches_table = bdd.table(f"matches_{tournoi.id}")
-            matches_table.insert(eval(encoded_match))
-            for j in range(len(match.liste_de_joueurs)):
-                encoded_pairs = json.dumps(match.liste_de_joueurs[j], cls=Encoder, indent=4)
-                pairs_table = bdd.table(f"pairs_{match.id}_{tournoi.id}")
-                pairs_table.insert(eval(encoded_pairs))
 
 
 def modify_round(round_being_edited, tournament, bdd):
@@ -175,60 +156,10 @@ def modify_round(round_being_edited, tournament, bdd):
                             rounds.Tour(f"tour_{len(tournament.tournees) + 1}",
                                         "liste_de_matchs").saisir_score(tournament, bdd)
             elif choix_quinquies == "n":
-                rounds_encode(tournament, bdd, round_being_edited)
-                for matches_played in round_being_edited.liste_de_matches:
-                    versus_encode(tournament, bdd, matches_played)
+                edit_tournament_encode(tournament, bdd)
                 rounds.Tour(f"tour_{len(tournament.tournees) + 1}", "liste_de_matchs").ajouter_tour(tournament, bdd)
     except KeyboardInterrupt:
-        rounds_encode(tournament, bdd, round_being_edited)
-        for matches_played in round_being_edited.liste_de_matches:
-            versus_encode(tournament, bdd, matches_played)
+        edit_tournament_encode(tournament, bdd)
         print(" ==> Modification du tournoi annulée")
         print("-" * 163)
         return None
-
-
-def rounds_decode(bdd, tous_les_tournois):
-    for tournoi in tous_les_tournois:
-        serialized_round = bdd.table(f"rounds_{tournoi.id}").all()
-        tournoi.tournees = []
-        for i in range(len(serialized_round)):
-            deserialized_round = serialized_round[i]
-            id = deserialized_round['id']
-            liste_de_matches = deserialized_round['liste_de_matches']
-            tour = rounds.Tour(id=id, liste_de_matches=liste_de_matches)
-            tournoi.tournees.append(tour)
-
-
-def versus_decode(bdd, tous_les_tournois):
-    for tournoi in tous_les_tournois:
-        serialized_match = bdd.table(f"matches_{tournoi.id}").all()
-        for tour in tournoi.tournees:
-            tour.liste_de_matches = []
-            for i in range(len(serialized_match)):
-                deserialized_match = serialized_match[i]
-                id = deserialized_match['id']
-                liste_de_joueurs = ['liste_de_joueurs']
-                resultat = deserialized_match['resultat']
-                match = versus.Match(id=id, liste_de_joueurs=liste_de_joueurs, resultat=resultat)
-                tour.liste_de_matches.append(match)
-    for tournoi in tous_les_tournois:
-        for tour in tournoi.tournees:
-            for match in tour.liste_de_matches:
-                match.liste_de_joueurs = []
-                serialized_pairs = bdd.table(f"pairs_{match.id}_{tournoi.id}").all()
-                for j in range(len(serialized_pairs)):
-                    deserialized_pairs = serialized_pairs[j]
-                    num = deserialized_pairs['id']
-                    nom_de_famille = deserialized_pairs['nom_de_famille']
-                    prenom = deserialized_pairs['prenom']
-                    date_de_naissance = deserialized_pairs['date_de_naissance']
-                    sexe = deserialized_pairs['sexe']
-                    classement = deserialized_pairs['classement']
-                    score = deserialized_pairs['score']
-                    joueur = player.Joueur(id=num, nom_de_famille=nom_de_famille, prenom=prenom,
-                                           date_de_naissance=date_de_naissance, sexe=sexe,
-                                           classement=classement, score=score)
-                    match.liste_de_joueurs.append(joueur)
-                print(match.id)
-                print(match.liste_de_joueurs)

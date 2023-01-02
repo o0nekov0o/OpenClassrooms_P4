@@ -63,7 +63,7 @@ class Joueur:
                                         new_player_data["prenom"], new_player_data["date_de_naissance"],
                                         new_player_data["sexe"], new_player_data["classement"])
                     main_tournoi.joueurs.append(new_player)
-                    settings.player_encode(main_tournoi, bdd, new_player)
+                    settings.edit_tournament_encode(main_tournoi, bdd)
                 elif len(main_tournoi.joueurs) >= 8:
                     print("Le tournoi a déjà son nombre maximal de joueurs")
                     print("-" * 163)
@@ -145,7 +145,7 @@ class Joueur:
                 elif choix == "4":
                     return None
                 print("-" * 163)
-                settings.edit_player_encode(main_tournoi, bdd, player_to_modify)
+                settings.edit_tournament_encode(main_tournoi, bdd)
                 self.editer_joueur_controller(main_tournoi, bdd)
             else:
                 print("Aucun joueur n'a déjà été ajouté")
