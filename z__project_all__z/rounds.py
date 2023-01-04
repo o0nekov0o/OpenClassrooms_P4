@@ -59,22 +59,32 @@ class Tour:
                         already_played[playerA].append(playerB)
                         already_played[playerB].append(playerA)
                 players_added_to_round = []
-                for i in range(0, 4):
-                    for player in main_tournoi.joueurs:
-                        if player not in players_added_to_round:
-                            for adversaire in main_tournoi.joueurs:
-                                if(
-                                        adversaire not in players_added_to_round
-                                        and player != adversaire and
-                                        adversaire not in already_played[player]
-                                        and player not in already_played[adversaire]
-                                ):
-                                    id_match = f"{id_round}_match_{i}"
-                                    new_matches.append(
-                                        versus.Match(id=id_match, liste_de_joueurs=[player, adversaire]))
-                                    players_added_to_round.append(adversaire)
-                                    players_added_to_round.append(player)
-                                    break
+                i = 1
+                for player in main_tournoi.joueurs:
+                    if player not in players_added_to_round:
+                        for adversaire in main_tournoi.joueurs:
+                            if(
+                                    adversaire not in players_added_to_round
+                                    and player != adversaire
+                                    and adversaire not in already_played[player]
+                            ):
+                                id_match = f"{id_round}_match_{i}"
+                                i += 1
+                                new_matches.append(
+                                    versus.Match(id=id_match, liste_de_joueurs=[player, adversaire]))
+                                players_added_to_round.append(adversaire)
+                                players_added_to_round.append(player)
+                                break
+                remaining_players = [player for player in main_tournoi.joueurs if player not in players_added_to_round]
+                L = len(remaining_players)
+                if L % 2 != 0:
+                    raise Exception("uneven remaining players")
+                for idx in range(0, L, 2):
+                    id_match = f"{id_round}_match_{i}"
+                    i += 1
+                    new_matches.append(
+                        versus.Match(id=id_match, liste_de_joueurs=[remaining_players[idx], remaining_players[idx+1]]))
+
                 new_tour = Tour(id=id_round, liste_de_matches=new_matches)
                 print("Nouveau round créé")
                 print("-" * 163)
