@@ -78,8 +78,6 @@ def versus_decode(serialized_matches, players):
             for k in range(len(players)):
                 if liste_de_joueurs[j].id == players[k].id:
                     liste_de_joueurs[j] = players[k]
-                else:
-                    print("erreur de désérialisation")
         resultat = deserialized_match['resultat']
         match = versus.Match(id=id, liste_de_joueurs=liste_de_joueurs, resultat=resultat)
         matches.append(match)
@@ -121,16 +119,19 @@ def modify_round(round_being_edited, tournament, bdd):
         choix_quinquies = "oui"
         while choix_quinquies not in {"o", "n"}:
             choix_quinquies = input("Souhaitez-vous modifier un dernier match, oui (o) ou non (n) ? ")
+            print("-" * 163)
             if choix_quinquies == "o":
                 for i, match in enumerate(round_being_edited.liste_de_matches):
                     print(f"{i}/ {match.liste_de_joueurs[0].prenom} vs {match.liste_de_joueurs[1].prenom}")
                 choix_sexties = int(input("Quel match voulez vous saisir ? "))
+                print("-" * 163)
                 match_to_modify = round_being_edited.liste_de_matches[choix_sexties]
                 if match_to_modify.resultat is not None:
                     choix_septies = "oui"
                     while choix_septies not in {"o", "n"}:
                         choix_septies = input("Match déjà saisi, voulez-vous le modifier, "
                                               "oui (o) ou non (n) ? ")
+                        print("-" * 163)
                         if choix_septies == "o":
                             if match_to_modify.resultat == 0:
                                 match_to_modify.liste_de_joueurs[0].score -= 1
@@ -143,6 +144,7 @@ def modify_round(round_being_edited, tournament, bdd):
                                                      f"{match_to_modify.liste_de_joueurs[0].prenom} "
                                                      f"a gagné, 1 si nul, 2 si "
                                                      f"{match_to_modify.liste_de_joueurs[1].prenom}) ? "))
+                            print("-" * 163)
                             if choix_octies == 0:
                                 match_to_modify.liste_de_joueurs[0].score += 1
                             elif choix_octies == 1:

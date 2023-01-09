@@ -22,6 +22,8 @@ l'accès aux différentes fonctions du programme est explicitement indiqué, not
 - Créer des rounds dans le tournoi
 - Modifier un tournoi
 
-#### Comment générer un fichier flake8-html ?
+#### Comment générer un rapport flake8-html ?
 
-- install
+- Entrer la commande _flake8-html_ depuis le terminal
+- Lancer le fichier _index.html_ depuis le dossier _flake-report_
+- Accéder à la liste des erreurs PEP8 en parcourant la page web

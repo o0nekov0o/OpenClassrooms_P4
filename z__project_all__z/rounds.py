@@ -1,5 +1,6 @@
 from z__project_all__z import versus
 from z__project_all__z import settings
+import os
 
 
 class Tour:
@@ -26,7 +27,7 @@ class Tour:
                 Tour(f"tour_{rounds_count + 1}", "liste_de_matchs").saisir_score(main_tournoi, bdd)
             if rounds_count == 7:
                 print("Tournoi terminé, ajoutez-en un autre")
-                return None
+                os.system('python main.py')
             number_of_rounds = len(main_tournoi.tournees)
             id_round = f"round_{number_of_rounds + 1}"
             new_matches = []
@@ -52,7 +53,7 @@ class Tour:
                     ...
                 }"""
                 already_played = {player: [] for player in main_tournoi.joueurs}
-                for tour in main_tournoi.tournees[:-1]:
+                for tour in main_tournoi.tournees:
                     for match in tour.liste_de_matches:
                         playerA = match.liste_de_joueurs[0]
                         playerB = match.liste_de_joueurs[1]
@@ -76,15 +77,14 @@ class Tour:
                                 players_added_to_round.append(player)
                                 break
                 remaining_players = [player for player in main_tournoi.joueurs if player not in players_added_to_round]
-                L = len(remaining_players)
-                if L % 2 != 0:
+                j = len(remaining_players)
+                if j % 2 != 0:
                     raise Exception("uneven remaining players")
-                for idx in range(0, L, 2):
+                for idx in range(0, j, 2):
                     id_match = f"{id_round}_match_{i}"
                     i += 1
                     new_matches.append(
                         versus.Match(id=id_match, liste_de_joueurs=[remaining_players[idx], remaining_players[idx+1]]))
-
                 new_tour = Tour(id=id_round, liste_de_matches=new_matches)
                 print("Nouveau round créé")
                 print("-" * 163)
@@ -96,6 +96,7 @@ class Tour:
                 Tour(id=id_round, liste_de_matches=new_matches).saisir_score(main_tournoi, bdd)
         except KeyboardInterrupt:
             print(" ==> Ajout du tour annulé")
+            print("-" * 163)
             return None
 
     def saisir_score(self, main_tournoi, bdd):
@@ -118,11 +119,13 @@ class Tour:
             for i, match in enumerate(round_to_modify.liste_de_matches):
                 print(f"{i}/ {match.liste_de_joueurs[0].prenom} vs {match.liste_de_joueurs[1].prenom}")
             choix = int(input("Quel match voulez vous saisir ? "))
+            print("-" * 163)
             match_to_modify = round_to_modify.liste_de_matches[choix]
             if match_to_modify.resultat is not None:
                 choix_ter = "oui"
                 while choix_ter not in {"o", "n"}:
                     choix_ter = input("Match déjà saisi, voulez-vous le modifier, oui (o) ou non (n) ? ")
+                    print("-" * 163)
                     if choix_ter == "o":
                         if match_to_modify.resultat == 0:
                             match_to_modify.liste_de_joueurs[0].score -= 1
@@ -134,6 +137,7 @@ class Tour:
                         choix_quater = int(input(f"Quel est le score du match (0 si "
                                                  f"{match_to_modify.liste_de_joueurs[0].prenom} a gagné, "
                                                  f"1 si nul, 2 si {match_to_modify.liste_de_joueurs[1].prenom}) ? "))
+                        print("-" * 163)
                         if choix_quater == 0:
                             match_to_modify.liste_de_joueurs[0].score += 1
                         elif choix_quater == 1:
@@ -150,6 +154,7 @@ class Tour:
                 choix_bis = int(input(f"Quel est le score du match (0 si "
                                       f"{match_to_modify.liste_de_joueurs[0].prenom} a gagné, "
                                       f"1 si nul, 2 si {match_to_modify.liste_de_joueurs[1].prenom}) ? "))
+                print("-" * 163)
                 if choix_bis == 0:
                     match_to_modify.liste_de_joueurs[0].score += 1
                 elif choix_bis == 1:
@@ -161,8 +166,10 @@ class Tour:
                 print("Score du match saisi")
         except (ValueError, IndexError):
             print("Je n'ai pas compris votre choix")
+            print("-" * 163)
             self.saisir_score(main_tournoi, bdd)
         except KeyboardInterrupt:
             print(" ==> Modification du tour annulée")
+            print("-" * 163)
             return None
         self.saisir_score(main_tournoi, bdd)

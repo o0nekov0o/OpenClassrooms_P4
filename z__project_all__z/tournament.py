@@ -113,7 +113,6 @@ class Tournoi:
             print("-" * 163)
             return None
 
-
     def editer_tournoi_controller(self, tous_les_tournois, bdd):
         """
         edit created tournament instances
