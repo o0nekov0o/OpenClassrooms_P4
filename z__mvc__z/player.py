@@ -1,4 +1,4 @@
-from z__project_all__z import settings
+from z__mvc__z import settings_2
 
 
 class Joueur:
@@ -34,7 +34,7 @@ class Joueur:
                     f"Entrez le nom de famille du joueur {len(main_tournoi.joueurs)}: ")
             while not new_player["prenom"].isalpha():
                 new_player["prenom"] = input(f"Entrez le prenom du joueur {len(main_tournoi.joueurs)}: ")
-            while not settings.validate(new_player["date_de_naissance"]):
+            while not settings_2.validate(new_player["date_de_naissance"]):
                 new_player["date_de_naissance"] = input(
                     f"Entrez la date de naissance du joueur {len(main_tournoi.joueurs)}, "
                     f"JJ-MM-AAAA: ")
@@ -63,7 +63,7 @@ class Joueur:
                                         new_player_data["prenom"], new_player_data["date_de_naissance"],
                                         new_player_data["sexe"], new_player_data["classement"])
                     main_tournoi.joueurs.append(new_player)
-                    settings.edit_tournament_encode(main_tournoi, bdd)
+                    settings_2.edit_tournament_encode(main_tournoi, bdd)
                 elif len(main_tournoi.joueurs) >= 8:
                     print("Le tournoi a déjà son nombre maximal de joueurs")
                     print("-" * 163)
@@ -90,6 +90,7 @@ class Joueur:
             for i, joueur in enumerate(main_tournoi.joueurs):
                 print(f"{i}/ {joueur.prenom}")
             index = int(input("Quel joueur voulez-vous modifier ? "))
+            print("-" * 163)
             player_to_modify = main_tournoi.joueurs[index]
             print(f"0/ Nom: {player_to_modify.nom_de_famille}")
             print(f"1/ Prénom: {player_to_modify.prenom}")
@@ -97,6 +98,7 @@ class Joueur:
             print(f"3/ Sexe: {player_to_modify.sexe}")
             print("4/ Annulation et retour")
             choix = input("Que voulez-vous modifier ? ")
+            print("-" * 163)
             if choix in {"0", "1", "2", "3", "4"}:
                 return new_data_player, player_to_modify, choix
             else:
@@ -133,7 +135,7 @@ class Joueur:
                     player_to_modify.prenom = new_data_player["prenom"]
                     print("Le joueur a été modifié")
                 elif choix == "2":
-                    while not settings.validate(new_data_player["date_de_naissance"]):
+                    while not settings_2.validate(new_data_player["date_de_naissance"]):
                         new_data_player["date_de_naissance"] = input("Entrer la nouvelle date de naissance du joueur: ")
                     player_to_modify.date_de_naissance = new_data_player["nom_de_famille"]
                     print("Le joueur a été modifié")
@@ -145,7 +147,7 @@ class Joueur:
                 elif choix == "4":
                     return None
                 print("-" * 163)
-                settings.edit_tournament_encode(main_tournoi, bdd)
+                settings_2.edit_tournament_encode(main_tournoi, bdd)
                 self.editer_joueur_controller(main_tournoi, bdd)
             else:
                 print("Aucun joueur n'a déjà été ajouté")

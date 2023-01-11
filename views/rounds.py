@@ -1,5 +1,3 @@
-from models.rounds import Tour
-
 class RoundView:
     def ajouter_tour_success_view(self, new_matches):
         print("Nouveau round créé")

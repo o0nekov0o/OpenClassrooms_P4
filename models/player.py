@@ -1,5 +1,3 @@
-from z__project_all__z import settings
-
 class Joueur:
     def __init__(self, id, nom_de_famille, prenom, date_de_naissance,
                  sexe, classement, score=0):

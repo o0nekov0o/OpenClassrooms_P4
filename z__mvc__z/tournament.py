@@ -1,4 +1,4 @@
-from z__project_all__z import settings
+from z__mvc__z import settings_2
 
 
 class Tournoi:
@@ -38,7 +38,7 @@ class Tournoi:
                 new_tournament["nom"] = input("Entrez le nom du tournoi: ")
             while not new_tournament["lieu"].isalpha():
                 new_tournament["lieu"] = input("Entrez le lieu du tournoi: ")
-            while not settings.validate(new_tournament["date"]):
+            while not settings_2.validate(new_tournament["date"]):
                 new_tournament["date"] = input("Entrez la date du tournoi, JJ-MM-AAAA: ")
             while new_tournament["controle_du_temps"].lower() not in {"bullet", "blitz", "quickshot"}:
                 new_tournament["controle_du_temps"] = input("Entrez le contrôle du temps du tournoi, "
@@ -66,7 +66,7 @@ class Tournoi:
                                      new_tournament_data["joueurs"], new_tournament_data["controle_du_temps"],
                                      new_tournament_data["description"])
             tous_les_tournois.append(new_tournament)
-            settings.tournament_encode(new_tournament, bdd)
+            settings_2.tournament_encode(new_tournament, bdd)
         except KeyboardInterrupt:
             print(" ==> Ajout du tournoi annulé")
             print("-" * 163)
@@ -89,6 +89,7 @@ class Tournoi:
             for i, tournament in enumerate(tous_les_tournois):
                 print(f"{i}/ {tournament.nom}")
             index = int(input("Quel tournoi voulez-vous modifier ? "))
+            print("-" * 163)
             tournament_to_modify = tous_les_tournois[index]
             print(f"0/ Nom: {tournament_to_modify.nom}")
             print(f"1/ Lieu: {tournament_to_modify.lieu}")
@@ -97,6 +98,7 @@ class Tournoi:
             print(f"4/ Description: {tournament_to_modify.description}")
             print("5/ Annulation et retour")
             choix = input("Que voulez-vous modifier ? ")
+            print("-" * 163)
             if choix in {"0", "1", "2", "3", "4", "5"}:
                 return new_data_tournament, tournament_to_modify, choix
             else:
@@ -134,7 +136,7 @@ class Tournoi:
                     tournament_to_modify.lieu = new_data_tournament["lieu"]
                     print("Le tournoi a été modifié")
                 elif choix == "2":
-                    while not settings.validate(new_data_tournament["date"]):
+                    while not settings_2.validate(new_data_tournament["date"]):
                         new_data_tournament["date"] = input("Entrer la nouvelle date du tournoi: ")
                     tournament_to_modify.date = new_data_tournament["date"]
                     print("Le tournoi a été modifié")
@@ -156,7 +158,7 @@ class Tournoi:
                     print("-" * 163)
                     self.editer_tournoi_controller(tous_les_tournois, bdd)
                 print("-" * 163)
-                settings.edit_tournament_encode(tournament_to_modify, bdd)
+                settings_2.edit_tournament_encode(tournament_to_modify, bdd)
             except (ValueError, IndexError):
                 print("Je n'ai pas compris votre choix")
                 print("-" * 163)

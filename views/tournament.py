@@ -1,4 +1,4 @@
-from z__project_all__z import settings
+from z__mvc__z import settings
 
 
 class TournamentView:
@@ -57,6 +57,7 @@ class TournamentView:
                 for i, tournament in enumerate(tous_les_tournois):
                     print(f"{i}/ {tournament.nom}")
                 index = int(input("Quel tournoi voulez-vous modifier ? "))
+                print("-" * 163)
                 tournament_to_modify = tous_les_tournois[index]
                 print(f"0/ Nom: {tournament_to_modify.nom}")
                 print(f"1/ Lieu: {tournament_to_modify.lieu}")
@@ -65,6 +66,7 @@ class TournamentView:
                 print(f"4/ Description: {tournament_to_modify.description}")
                 print("5/ Annulation et retour")
                 choix = input("Que voulez-vous modifier ? ")
+                print("-" * 163)
                 if choix in {"0", "1", "2", "3", "4", "5"}:
                     return new_data_tournament, tournament_to_modify, choix
                 else:

@@ -1,4 +1,4 @@
-from z__project_all__z import settings
+from z__mvc__z import settings
 from models.tournament import Tournoi
 from views.tournament import TournamentView
 
@@ -11,7 +11,7 @@ class TournamentController:
         :param bdd: from main.py, to create serialized tournament instances in json file
         :return: for main.py, main_controller use, in case of adding or adding canceled
         """
-        new_tournament_data = TournamentView.ajouter_tournoi_view(tous_les_tournois)
+        new_tournament_data = TournamentView().ajouter_tournoi_view(tous_les_tournois)
         new_tournament = Tournoi(new_tournament_data["id"], new_tournament_data["nom"],
                                     new_tournament_data["lieu"], new_tournament_data["date"],
                                     new_tournament_data["nombre_de_tours"], new_tournament_data["tournees"],
@@ -27,7 +27,7 @@ class TournamentController:
         :param bdd: from main.py, to update serialized tournament instances in json file
         :return: None
         """
-        new_data_tournament, tournament_to_modify, choix = TournamentView.editer_tournoi_view(tous_les_tournois)
+        new_data_tournament, tournament_to_modify, choix = TournamentView().editer_tournoi_view(tous_les_tournois)
         if choix == "0":
             tournament_to_modify.nom = new_data_tournament["nom"]
         elif choix == "1":

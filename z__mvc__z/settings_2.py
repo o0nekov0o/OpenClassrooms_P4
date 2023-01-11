@@ -1,7 +1,4 @@
-from z__project_all__z import tournament
-from z__project_all__z import player
-from z__project_all__z import rounds
-from z__project_all__z import versus
+from z__mvc__z import tournament, player, rounds, versus
 from datetime import datetime
 import json
 
