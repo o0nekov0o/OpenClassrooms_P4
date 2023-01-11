@@ -24,6 +24,7 @@ l'accès aux différentes fonctions du programme est explicitement indiqué, not
 
 #### Comment générer un rapport flake8-html ?
 
-- Entrer la commande _flake8-html_ depuis le terminal
+- Depuis le terminal, entrer la commande suivante :
+  - _flake8 --format=html --htmldir=flake-report_
 - Lancer le fichier _index.html_ depuis le dossier _flake-report_
 - Accéder à la liste des erreurs PEP8 en parcourant la page web
