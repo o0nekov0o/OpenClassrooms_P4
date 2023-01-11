@@ -17,10 +17,10 @@
 
          <div id="doc">
             <div id="l1"
-               class="code sev- "><tt><i>1</i> <span class="kn">from</span> <span class="nn">z__project_all__z</span> <span class="kn">import</span> <span class="n">settings</span></tt>
+               class="code sev- "><tt><i>1</i> <span class="kn">from</span> <span class="nn">z__mvc__z</span> <span class="kn">import</span> <span class="n">settings</span></tt>
             </div>
             <div id="l2"
-               class="code sev- "><tt><i>2</i> <span class="kn">from</span> <span class="nn">model.player</span> <span class="kn">import</span> <span class="n">Joueur</span></tt>
+               class="code sev- "><tt><i>2</i> <span class="kn">from</span> <span class="nn">models.player</span> <span class="kn">import</span> <span class="n">Joueur</span></tt>
             </div>
             <div id="l3"
                class="code sev- "><tt><i>3</i> <span class="kn">from</span> <span class="nn">views.player</span> <span class="kn">import</span> <span class="n">PlayerView</span></tt>
@@ -68,7 +68,7 @@
                      </span>
                      Over-indented</li>
                
-               </ul><tt><i>15</i>                 <span class="n">new_player_data</span> <span class="o">=</span> <span class="n">PlayerView</span><span class="o">.</span><span class="n">ajouter_joueur_view</span><span class="p">(</span><span class="n">main_tournoi</span><span class="p">)</span></tt>
+               </ul><tt><i>15</i>                 <span class="n">new_player_data</span> <span class="o">=</span> <span class="n">PlayerView</span><span class="p">()</span><span class="o">.</span><span class="n">ajouter_joueur_view</span><span class="p">(</span><span class="n">main_tournoi</span><span class="p">)</span></tt>
             </div>
             <div id="l16"
                class="code sev- "><tt><i>16</i>                 <span class="n">new_player</span> <span class="o">=</span> <span class="n">Joueur</span><span class="p">(</span><span class="n">new_player_data</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">],</span> <span class="n">new_player_data</span><span class="p">[</span><span class="s2">&quot;nom_de_famille&quot;</span><span class="p">],</span></tt>
@@ -83,7 +83,7 @@
                class="code sev- "><tt><i>19</i>                 <span class="n">main_tournoi</span><span class="o">.</span><span class="n">joueurs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">new_player</span><span class="p">)</span></tt>
             </div>
             <div id="l20"
-               class="code sev- "><tt><i>20</i>                 <span class="n">settings</span><span class="o">.</span><span class="n">player_encode</span><span class="p">(</span><span class="n">main_tournoi</span><span class="p">,</span> <span class="n">bdd</span><span class="p">,</span> <span class="n">new_player</span><span class="p">)</span></tt>
+               class="code sev- "><tt><i>20</i>                 <span class="n">settings</span><span class="o">.</span><span class="n">edit_tournament_encode</span><span class="p">(</span><span class="n">main_tournoi</span><span class="p">,</span> <span class="n">bdd</span><span class="p">)</span></tt>
             </div>
             <div id="l21"
                class="code sev- "><tt><i>21</i> &nbsp;</tt>
@@ -110,7 +110,7 @@
                class="code sev- "><tt><i>28</i> <span class="sd">        &quot;&quot;&quot;</span></tt>
             </div>
             <div id="l29"
-               class="code sev- "><tt><i>29</i>         <span class="n">new_data_player</span><span class="p">,</span> <span class="n">player_to_modify</span><span class="p">,</span> <span class="n">choix</span> <span class="o">=</span> <span class="n">PlayerView</span><span class="o">.</span><span class="n">editer_joueur_view</span><span class="p">(</span><span class="n">main_tournoi</span><span class="p">)</span></tt>
+               class="code sev- "><tt><i>29</i>         <span class="n">new_data_player</span><span class="p">,</span> <span class="n">player_to_modify</span><span class="p">,</span> <span class="n">choix</span> <span class="o">=</span> <span class="n">PlayerView</span><span class="p">()</span><span class="o">.</span><span class="n">editer_joueur_view</span><span class="p">(</span><span class="n">main_tournoi</span><span class="p">)</span></tt>
             </div>
             <div id="l30"
                class="code sev- "><tt><i>30</i>         <span class="k">if</span> <span class="n">choix</span> <span class="o">==</span> <span class="s2">&quot;0&quot;</span><span class="p">:</span></tt>
@@ -149,22 +149,13 @@
                class="code sev- "><tt><i>41</i>         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;-&quot;</span> <span class="o">*</span> <span class="mi">163</span><span class="p">)</span></tt>
             </div>
             <div id="l42"
-               class="code sev- "><tt><i>42</i>         <span class="n">settings</span><span class="o">.</span><span class="n">edit_player_encode</span><span class="p">(</span><span class="n">main_tournoi</span><span class="p">,</span> <span class="n">bdd</span><span class="p">,</span> <span class="n">player_to_modify</span><span class="p">)</span></tt>
+               class="code sev- "><tt><i>42</i>         <span class="n">settings</span><span class="o">.</span><span class="n">edit_tournament_encode</span><span class="p">(</span><span class="n">main_tournoi</span><span class="p">,</span> <span class="n">bdd</span><span class="p">)</span></tt>
             </div>
             <div id="l43"
                class="code sev- "><tt><i>43</i>         <span class="bp">self</span><span class="o">.</span><span class="n">editer_joueur_controller</span><span class="p">(</span><span class="n">main_tournoi</span><span class="p">,</span> <span class="n">bdd</span><span class="p">)</span></tt>
             </div>
             <div id="l44"
-               class="code sev-2  le">
-               <ul class="violations">
-               
-                  <li>
-                     <span class="count sev-2">
-                        W292
-                     </span>
-                     No newline at end of file</li>
-               
-               </ul><tt><i>44</i>         <span class="k">return</span> <span class="kc">None</span></tt>
+               class="code sev- "><tt><i>44</i>         <span class="k">return</span> <span class="kc">None</span></tt>
             </div>
             
          </div>

@@ -1,6 +1,3 @@
-from z__project_all__z import settings
-
-
 class Tournoi:
     def __init__(self, id, nom, lieu, date,
                  nombre_de_tours, tournees, joueurs,

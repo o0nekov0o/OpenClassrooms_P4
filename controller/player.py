@@ -1,5 +1,5 @@
-from z__project_all__z import settings
-from model.player import Joueur
+from z__mvc__z import settings
+from models.player import Joueur
 from views.player import PlayerView
 
 
@@ -12,12 +12,12 @@ class PlayerController:
         :return: None
         """
         for i in range(8):
-                new_player_data = PlayerView.ajouter_joueur_view(main_tournoi)
+                new_player_data = PlayerView().ajouter_joueur_view(main_tournoi)
                 new_player = Joueur(new_player_data["id"], new_player_data["nom_de_famille"],
                                     new_player_data["prenom"], new_player_data["date_de_naissance"],
                                     new_player_data["sexe"], new_player_data["classement"])
                 main_tournoi.joueurs.append(new_player)
-                settings.player_encode(main_tournoi, bdd, new_player)
+                settings.edit_tournament_encode(main_tournoi, bdd)
 
     def editer_joueur_controller(self, main_tournoi, bdd):
         """
@@ -26,7 +26,7 @@ class PlayerController:
         :param bdd: from main.py, to update serialized player instances in json file
         :return: None
         """
-        new_data_player, player_to_modify, choix = PlayerView.editer_joueur_view(main_tournoi)
+        new_data_player, player_to_modify, choix = PlayerView().editer_joueur_view(main_tournoi)
         if choix == "0":
             player_to_modify.nom_de_famille = new_data_player["nom_de_famille"]
         elif choix == "1":
@@ -39,6 +39,6 @@ class PlayerController:
             return None
         print("Le joueur a été modifié")
         print("-" * 163)
-        settings.edit_player_encode(main_tournoi, bdd, player_to_modify)
+        settings.edit_tournament_encode(main_tournoi, bdd)
         self.editer_joueur_controller(main_tournoi, bdd)
         return None

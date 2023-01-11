@@ -1,5 +1,5 @@
-from z__project_all__z import rounds
-from z__project_all__z import settings
+from z__mvc__z import rounds
+from z__mvc__z import settings_2
 
 
 class Match:
@@ -24,10 +24,10 @@ class Match:
             round_to_modify = main_tournoi.tournees[-1]
             if rounds.Tour(f"tour_{len(main_tournoi.tournees) + 1}", "liste_de_matchs").completed(main_tournoi):
                 print("Round terminé, créez-en un nouveau")
-                settings.modify_round(round_to_modify, main_tournoi, bdd)
+                settings_2.modify_round(round_to_modify, main_tournoi, bdd)
             for i, match in enumerate(round_to_modify.liste_de_matches):
                 print(f"{i}/ {match.liste_de_joueurs[0].prenom} vs {match.liste_de_joueurs[1].prenom}")
-            choix = int(input("Quel match voulez vous saisir ? "))
+            choix = int(input("Quel match voulez-vous saisir ? "))
             print("-" * 163)
             match_to_modify = round_to_modify.liste_de_matches[choix]
             if match_to_modify.resultat is not None:
@@ -73,7 +73,7 @@ class Match:
                     match_to_modify.liste_de_joueurs[1].score += 1
                 match_to_modify.resultat = choix_bis
                 print("Score du match saisi")
-        except (ValueError, IndexError):
+        except (ValueError, IndexError, AttributeError):
             print("Je n'ai pas compris votre choix")
             print("-" * 163)
             self.saisir_score(main_tournoi, bdd)

@@ -1,6 +1,3 @@
-from z__project_all__z import rounds
-from z__project_all__z import settings
-from models.rounds import Tour
 from views.versus import VersusView
 
 
@@ -14,9 +11,9 @@ class VersusController:
         :param main_tournoi: from versus.py.py, ajouter_match, for appending of round in the tournament rounds list
         :return: None
         """
-        match_to_modify = VersusView.get_match_to_modify(main_tournoi, bdd)
+        match_to_modify = VersusView().get_match_to_modify(main_tournoi, bdd)
         if match_to_modify.resultat is not None:
-            choix_ter = VersusView.confirm_modify_existing_match()
+            choix_ter = VersusView().confirm_modify_existing_match()
             if choix_ter == "o":
                 if match_to_modify.resultat == 0:
                     match_to_modify.liste_de_joueurs[0].score -= 1
@@ -26,7 +23,7 @@ class VersusController:
                 elif match_to_modify.resultat == 2:
                     match_to_modify.liste_de_joueurs[1].score -= 1
 
-                choix_score = VersusView.get_new_score(match_to_modify)
+                choix_score = VersusView().get_new_score(match_to_modify)
                 if choix_score == 0:
                     match_to_modify.liste_de_joueurs[0].score += 1
                 elif choix_score == 1:
@@ -39,7 +36,7 @@ class VersusController:
 
             self.saisir_score(main_tournoi, bdd)
         else:
-            choix_score = VersusView.get_new_score(match_to_modify)
+            choix_score = VersusView().get_new_score(match_to_modify)
             if choix_score == 0:
                 match_to_modify.liste_de_joueurs[0].score += 1
             elif choix_score == 1:

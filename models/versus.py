@@ -1,7 +1,3 @@
-from z__project_all__z import rounds
-from z__project_all__z import settings
-
-
 class Match:
     def __init__(self, id, liste_de_joueurs, resultat=None):
         self.id = id

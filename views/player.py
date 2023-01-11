@@ -1,4 +1,4 @@
-from z__project_all__z import settings
+from z__mvc__z import settings
 
 
 class PlayerView:
@@ -36,6 +36,7 @@ class PlayerView:
                 while new_player["sexe"].lower() not in {"m", "f"}:
                     new_player["sexe"] = input(f"Entrez le sexe du joueur {len(main_tournoi.joueurs)}, "
                                             f"masculin (m) ou feminin (f): ")
+                print("-" * 163)
                 return new_player
             except KeyboardInterrupt:
                 print(" ==> Ajout du joueur annulé")
@@ -59,6 +60,7 @@ class PlayerView:
                 for i, joueur in enumerate(main_tournoi.joueurs):
                     print(f"{i}/ {joueur.prenom}")
                 index = int(input("Quel joueur voulez-vous modifier ? "))
+                print("-" * 163)
                 player_to_modify = main_tournoi.joueurs[index]
                 print(f"0/ Nom: {player_to_modify.nom_de_famille}")
                 print(f"1/ Prénom: {player_to_modify.prenom}")
@@ -66,6 +68,7 @@ class PlayerView:
                 print(f"3/ Sexe: {player_to_modify.sexe}")
                 print("4/ Annulation et retour")
                 choix = input("Que voulez-vous modifier ? ")
+                print("-" * 163)
                 if choix in {"0", "1", "2", "3", "4"}:
                     return new_data_player, player_to_modify, choix
                 else:

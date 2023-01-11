@@ -1,5 +1,5 @@
-from z__project_all__z import versus
-from z__project_all__z import settings
+from z__mvc__z import versus
+from z__mvc__z import settings_2
 import os
 
 
@@ -115,7 +115,7 @@ class Tour:
             round_to_modify = main_tournoi.tournees[-1]
             if Tour(f"tour_{len(main_tournoi.tournees) + 1}", "liste_de_matchs").completed(main_tournoi):
                 print("Round terminé, créez-en un nouveau")
-                settings.modify_round(round_to_modify, main_tournoi, bdd)
+                settings_2.modify_round(round_to_modify, main_tournoi, bdd)
             for i, match in enumerate(round_to_modify.liste_de_matches):
                 print(f"{i}/ {match.liste_de_joueurs[0].prenom} vs {match.liste_de_joueurs[1].prenom}")
             choix = int(input("Quel match voulez vous saisir ? "))

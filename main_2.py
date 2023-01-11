@@ -1,10 +1,10 @@
-from z__mvc__z import settings
-from controller import tournament, player, rounds, versus
+from z__mvc__z import tournament, \
+    player, rounds, settings_2
 from tinydb import TinyDB
 
 db = TinyDB('db.json')
 all_tournaments = []
-settings.tournament_decode(db, all_tournaments)
+settings_2.tournament_decode(db, all_tournaments)
 
 
 def main_view():
@@ -16,7 +16,7 @@ def main_view():
     print("1/ Modifier un tournoi")
     for i, tournoi in enumerate(all_tournaments):
         print(f"{i + 2}/ Gérer le tournoi {tournoi.nom}")
-        settings.cancel = 0
+        settings_2.cancel = 0
     choix = int(input("Que voulez vous faire ? "))
     print("-" * 163)
     return choix
@@ -30,10 +30,14 @@ def main_controller():
     try:
         choix = main_view()
         if choix == 0:
-            tournament.TournamentController().ajouter_tournoi_controller(all_tournaments, db)
+            tournament.Tournoi(f"tournoi_{len(all_tournaments)}", "nom", "lieu", "date",
+                               "nombre_de_tours", "tournees", "joueurs", "controle_du_temps",
+                               "description").ajouter_tournoi_controller(all_tournaments, db)
             main_controller()
         elif choix == 1:
-            tournament.TournamentController().editer_tournoi_controller(all_tournaments, db)
+            tournament.Tournoi(f"tournoi_{len(all_tournaments)}", "nom", "lieu", "date",
+                               "nombre_de_tours", "tournees", "joueurs",
+                               "controle_du_temps", "description").editer_tournoi_controller(all_tournaments, db)
             main_controller()
         else:
             tournament_to_manage = all_tournaments[choix - 2]
@@ -42,10 +46,6 @@ def main_controller():
         print("Je n'ai pas compris votre choix")
         print("-" * 163)
         main_controller()
-    except (ValueError, IndexError, AttributeError):
-        print("Erreur de saisie, veuillez recommencer svp")
-        print("-" * 163)
-        tournament.TournamentController().editer_tournoi_controller(all_tournaments, db)
     except KeyboardInterrupt:
         print(" ==> Ajout du tournoi annulé")
         print("-" * 163)
@@ -88,10 +88,6 @@ def tournament_controller(main_tournoi):
             print("Je n'ai pas compris votre choix")
             print("-" * 163)
             tournament_controller(main_tournoi)
-    except (ValueError, IndexError, AttributeError):
-        print("Erreur de saisie, veuillez recommencer svp")
-        print("-" * 163)
-        round_controller(main_tournoi)
     except KeyboardInterrupt:
         print(" ==> Gestion du tournoi annulée")
         print("-" * 163)
@@ -121,10 +117,12 @@ def player_controller(main_tournoi):
     try:
         choix = player_view()
         if choix == '0':
-            player.PlayerController().ajouter_joueur_controller(main_tournoi, db)
+            player.Joueur(f"joueur_{len(main_tournoi.joueurs)}", "nom_de_famille", "prenom", "date_de_naissance",
+                          "sexe", "classement").ajouter_joueur_controller(main_tournoi, db)
             player_controller(main_tournoi)
         elif choix == '1':
-            player.PlayerController().editer_joueur_controller(main_tournoi, db)
+            player.Joueur(f"joueur_{len(main_tournoi.joueurs)}", "nom_de_famille", "prenom", "date_de_naissance",
+                          "sexe", "classement").editer_joueur_controller(main_tournoi, db)
             player_controller(main_tournoi)
         elif choix == '2':
             return None
@@ -137,10 +135,6 @@ def player_controller(main_tournoi):
     except KeyboardInterrupt:
         print(" ==> Gestion des joueurs annulée")
         print("-" * 163)
-    except (ValueError, IndexError, AttributeError):
-        print("Erreur de saisie, veuillez recommencer svp")
-        print("-" * 163)
-        player.PlayerController().editer_joueur_controller(main_tournoi, db)
     except TypeError:
         player_controller(main_tournoi)
         return None
@@ -169,9 +163,9 @@ def round_controller(main_tournoi):
     try:
         choix = round_view()
         if choix == '0':
-            rounds.RoundController().ajouter_tour(main_tournoi, db)
+            rounds.Tour(f"tour_{len(main_tournoi.tournees) + 1}", "liste_de_matchs").ajouter_tour(main_tournoi, db)
         elif choix == '1':
-            versus.VersusController().saisir_score(main_tournoi, db)
+            rounds.Tour(f"tour_{len(main_tournoi.tournees) + 1}", "liste_de_matchs").saisir_score(main_tournoi, db)
         elif choix == '2':
             return None
         elif choix == '3':
@@ -180,10 +174,6 @@ def round_controller(main_tournoi):
             print("Je n'ai pas compris votre choix")
             print("-" * 163)
             round_controller(main_tournoi)
-    except (ValueError, IndexError, AttributeError):
-        print("Erreur de saisie, veuillez recommencer svp")
-        print("-" * 163)
-        versus.VersusController().saisir_score(main_tournoi, db)
     except KeyboardInterrupt:
         print(" ==> Gestion des tours annulée")
         print("-" * 163)
