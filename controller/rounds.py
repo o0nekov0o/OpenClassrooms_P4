@@ -3,6 +3,7 @@ from views.rounds import RoundView
 from models.rounds import Tour
 from models.versus import Match
 import os
+import pandas
 
 
 class RoundController:
@@ -19,6 +20,8 @@ class RoundController:
                 VersusController().saisir_score(main_tournoi, bdd)
             if rounds_count == 7:
                 print("Tournoi terminé, ajoutez-en un autre")
+                print("Rapport du tournoi généré : rapport.xlsx")
+                pandas.read_json("db.json").to_excel("rapport.xlsx")
                 os.system('python main.py')
             number_of_rounds = len(main_tournoi.tournees)
             id_round = f"round_{number_of_rounds + 1}"

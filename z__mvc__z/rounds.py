@@ -1,6 +1,7 @@
 from z__mvc__z import versus
 from z__mvc__z import settings_2
 import os
+import pandas
 
 
 class Tour:
@@ -27,6 +28,8 @@ class Tour:
                 Tour(f"tour_{rounds_count + 1}", "liste_de_matchs").saisir_score(main_tournoi, bdd)
             if rounds_count == 7:
                 print("Tournoi terminé, ajoutez-en un autre")
+                print("Rapport du tournoi généré : rapport.xlsx")
+                pandas.read_json("db.json").to_excel("rapport.xlsx")
                 os.system('python main.py')
             number_of_rounds = len(main_tournoi.tournees)
             id_round = f"round_{number_of_rounds + 1}"
