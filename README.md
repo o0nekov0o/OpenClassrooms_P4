@@ -8,9 +8,19 @@ Développeur Python sur Openclassrooms
 #### Comment exécuter le programme ?
 
 Après s'être placé dans le répertoire du projet depuis le terminal,
-exécuter les commandes suivantes :
-- pip install -r requirements.txt
-- python main.py
+procéder aux étapes suivates :
+- Exécuter la commande suivante pour créer votre environnement virtuel :
+  - python -m venv env
+- Exécuter la commande suivante pour activer votre environnement virtuel :
+  - call env/Scripts/activate.bat (depuis Windows)
+  - en cas de non-fonctionnent, exécuter Powershell en tant qu'administrateur
+    - rentrer la commande _Set-ExecutionPolicy RemoteSigned_
+    - revenir au terminal, et rentrer la commande _env/Scripts/activate_
+  - source env/bin/activate (depuis autre OS)
+- Exécuter la commande suivante pour installer les paquets requis
+  - pip install -r requirements.txt
+- Exécuter la commande suivante pour lancer le programme
+  - python main.py
 
 #### Comment utiliser le programme ?
 
@@ -18,8 +28,8 @@ Le programme est conçu sous l'architecture modèle-vue-contrôleur.
 Après le lancement du programme, 
 l'accès aux différentes fonctions du programme est explicitement indiqué, notamment pour :
 - Créer un tournoi
-- Créer des joueurs dans le tournoi
-- Créer des rounds dans le tournoi
+- Créer des joueurs dans le tournoi (nombre de 8 requis)
+- Créer des rounds dans le tournoi (7 rounds pour faire tous les affrontements)
 - Modifier un tournoi
 
 #### Comment générer un rapport flake8-html ?
