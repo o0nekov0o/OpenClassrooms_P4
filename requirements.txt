@@ -2,12 +2,13 @@ et-xmlfile==1.1.0
 flake8==6.0.0
 flake8-html==0.4.3
 Jinja2==3.1.2
-jsonformatter==0.3.2
+JPype1==1.4.1
+json2html==1.3.0
 MarkupSafe==2.1.1
 mccabe==0.7.0
 numpy==1.24.1
 openpyxl==3.0.10
-pandas==1.5.3
+packaging==23.0
 pycodestyle==2.10.0
 pyflakes==3.0.1
 Pygments==2.14.0

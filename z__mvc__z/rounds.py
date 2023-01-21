@@ -1,5 +1,7 @@
 from z__mvc__z import versus
 from z__mvc__z import settings_2
+from json2html import *
+import json
 import os
 import pandas
 
@@ -28,8 +30,13 @@ class Tour:
                 Tour(f"tour_{rounds_count + 1}", "liste_de_matchs").saisir_score(main_tournoi, bdd)
             if rounds_count == 7:
                 print("Tournoi terminé, ajoutez-en un autre")
-                print("Rapport du tournoi généré : rapport.xlsx")
-                pandas.read_json("db.json").to_excel("rapport.xlsx")
+                with open("db.json") as file:
+                    data = json.load(file)
+                    scan_output = json2html.convert(json=data)
+                    html_report_file = "rapport.html"
+                    with open(html_report_file, "w") as html_file:
+                        html_file.write(str(scan_output))
+                        print("Rapport du tournoi généré : rapport.html")
                 os.system('python main.py')
             number_of_rounds = len(main_tournoi.tournees)
             id_round = f"round_{number_of_rounds + 1}"
