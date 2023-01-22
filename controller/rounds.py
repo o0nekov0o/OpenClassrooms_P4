@@ -2,10 +2,9 @@ from controller.versus import VersusController
 from views.rounds import RoundView
 from models.rounds import Tour
 from models.versus import Match
-from json2html import *
+from json2html import json2html
 import json
 import os
-
 
 
 class RoundController:
@@ -45,38 +44,45 @@ class RoundController:
                 main_tournoi.tournees.append(new_tour)
                 VersusController().saisir_score(main_tournoi, bdd)
             else:
-                """already_played = {
-                    player1: [player2, player5],
-                    player2: [player1, player6],
-                    ...
-                }"""
-                already_played = {player: [] for player in main_tournoi.joueurs}
-                for tour in main_tournoi.tournees:
-                    for match in tour.liste_de_matches:
-                        playerA = match.liste_de_joueurs[0]
-                        playerB = match.liste_de_joueurs[1]
-                        already_played[playerA].append(playerB)
-                        already_played[playerB].append(playerA)
-                players_added_to_round = []
-                for j in range(0, 4):
-                    for player in main_tournoi.joueurs:
-                        if player not in players_added_to_round:
-                            for adversaire in main_tournoi.joueurs:
-                                if (
-                                        adversaire not in players_added_to_round and
-                                        player != adversaire and
-                                        adversaire not in already_played[player]
-                                ):
-                                    id_match = f"{id_round}_match_{j}"
-                                    new_matches.append(Match(id=id_match, liste_de_joueurs=[player, adversaire]))
-                                    players_added_to_round.append(adversaire)
-                                    players_added_to_round.append(player)
-                                    j += 1
-                                    break
-                new_tour = Tour(id=id_round, liste_de_matches=new_matches)
-                RoundView().ajouter_tour_success_view(new_matches=new_matches)
-                main_tournoi.tournees.append(new_tour)
-                VersusController().saisir_score(main_tournoi, bdd)
+                self.ajouter_tour_suivant(main_tournoi, bdd, id_round, new_matches)
+        except KeyboardInterrupt:
+            print(" ==> Ajout du tour annulé")
+            return None
+
+    def ajouter_tour_suivant(self, main_tournoi, bdd, id_round, new_matches):
+        try:
+            """already_played = {
+                player1: [player2, player5],
+                player2: [player1, player6],
+                ...
+            }"""
+            already_played = {player: [] for player in main_tournoi.joueurs}
+            for tour in main_tournoi.tournees:
+                for match in tour.liste_de_matches:
+                    playerA = match.liste_de_joueurs[0]
+                    playerB = match.liste_de_joueurs[1]
+                    already_played[playerA].append(playerB)
+                    already_played[playerB].append(playerA)
+            players_added_to_round = []
+            for j in range(0, 4):
+                for player in main_tournoi.joueurs:
+                    if player not in players_added_to_round:
+                        for adversaire in main_tournoi.joueurs:
+                            if (
+                                    adversaire not in players_added_to_round and
+                                    player != adversaire and
+                                    adversaire not in already_played[player]
+                            ):
+                                id_match = f"{id_round}_match_{j}"
+                                new_matches.append(Match(id=id_match, liste_de_joueurs=[player, adversaire]))
+                                players_added_to_round.append(adversaire)
+                                players_added_to_round.append(player)
+                                j += 1
+                                break
+            new_tour = Tour(id=id_round, liste_de_matches=new_matches)
+            RoundView().ajouter_tour_success_view(new_matches=new_matches)
+            main_tournoi.tournees.append(new_tour)
+            VersusController().saisir_score(main_tournoi, bdd)
         except KeyboardInterrupt:
             print(" ==> Ajout du tour annulé")
             return None

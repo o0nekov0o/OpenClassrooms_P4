@@ -13,10 +13,10 @@ class TournamentController:
         """
         new_tournament_data = TournamentView().ajouter_tournoi_view(tous_les_tournois)
         new_tournament = Tournoi(new_tournament_data["id"], new_tournament_data["nom"],
-                                    new_tournament_data["lieu"], new_tournament_data["date"],
-                                    new_tournament_data["nombre_de_tours"], new_tournament_data["tournees"],
-                                    new_tournament_data["joueurs"], new_tournament_data["controle_du_temps"],
-                                    new_tournament_data["description"])
+                                 new_tournament_data["lieu"], new_tournament_data["date"],
+                                 new_tournament_data["nombre_de_tours"], new_tournament_data["tournees"],
+                                 new_tournament_data["joueurs"], new_tournament_data["controle_du_temps"],
+                                 new_tournament_data["description"])
         tous_les_tournois.append(new_tournament)
         settings.tournament_encode(new_tournament, bdd)
 

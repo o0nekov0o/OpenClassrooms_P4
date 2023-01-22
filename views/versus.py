@@ -2,6 +2,7 @@ from models.rounds import Tour
 from controller import rounds
 from z__mvc__z import settings
 
+
 class VersusView:
     def get_new_score(self, match_to_modify):
         """
@@ -13,14 +14,14 @@ class VersusView:
                                 f"1 si nul, 2 si {match_to_modify.liste_de_joueurs[1].prenom}) ? "))
         print("-" * 163)
         return choix_score
-    
+
     def confirm_modify_existing_match(self):
         choix = "oui"
         while choix not in {"o", "n"}:
             choix = input("Match déjà saisi, voulez-vous le modifier, oui (o) ou non (n) ? ")
             print("-" * 163)
         return choix
-    
+
     def get_match_to_modify(self, main_tournoi, bdd):
         try:
             if not main_tournoi.tournees:

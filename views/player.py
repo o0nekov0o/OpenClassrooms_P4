@@ -35,7 +35,7 @@ class PlayerView:
                         f"JJ-MM-AAAA: ")
                 while new_player["sexe"].lower() not in {"m", "f"}:
                     new_player["sexe"] = input(f"Entrez le sexe du joueur {len(main_tournoi.joueurs)}, "
-                                            f"masculin (m) ou feminin (f): ")
+                                               f"masculin (m) ou feminin (f): ")
                 print("-" * 163)
                 return new_player
             except KeyboardInterrupt:

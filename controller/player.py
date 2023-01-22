@@ -12,12 +12,12 @@ class PlayerController:
         :return: None
         """
         for i in range(8):
-                new_player_data = PlayerView().ajouter_joueur_view(main_tournoi)
-                new_player = Joueur(new_player_data["id"], new_player_data["nom_de_famille"],
-                                    new_player_data["prenom"], new_player_data["date_de_naissance"],
-                                    new_player_data["sexe"], new_player_data["classement"])
-                main_tournoi.joueurs.append(new_player)
-                settings.edit_tournament_encode(main_tournoi, bdd)
+            new_player_data = PlayerView().ajouter_joueur_view(main_tournoi)
+            new_player = Joueur(new_player_data["id"], new_player_data["nom_de_famille"],
+                                new_player_data["prenom"], new_player_data["date_de_naissance"],
+                                new_player_data["sexe"], new_player_data["classement"])
+            main_tournoi.joueurs.append(new_player)
+            settings.edit_tournament_encode(main_tournoi, bdd)
 
     def editer_joueur_controller(self, main_tournoi, bdd):
         """
